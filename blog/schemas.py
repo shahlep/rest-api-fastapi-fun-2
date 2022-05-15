@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import List
 
 
 class Blog(BaseModel):
@@ -7,12 +8,6 @@ class Blog(BaseModel):
 
 
 # https://pydantic-docs.helpmanual.io/usage/models/#recursive-orm-models
-class ShowBlog(BaseModel):
-    title: str
-    content: str
-
-    class Config:
-        orm_mode = True
 
 
 class User(BaseModel):
@@ -24,6 +19,14 @@ class User(BaseModel):
 class ShowUser(BaseModel):
     name: str
     email: str
+
+    class Config:
+        orm_mode = True
+
+
+class ShowBlog(BaseModel):
+    title: str
+    content: str
 
     class Config:
         orm_mode = True

@@ -21,7 +21,7 @@ def get_db():
 
 @app.post("/blog", status_code=status.HTTP_201_CREATED, tags=["Blog"])
 def create(blog: _schemas.Blog, db: Session = Depends(get_db)):
-    new_blog = _models.Blog(title=blog.title, content=blog.content)
+    new_blog = _models.Blog(title=blog.title, content=blog.content, user_id=blog.user)
     db.add(new_blog)
     db.commit()
     db.refresh(new_blog)
@@ -48,7 +48,9 @@ def all_blog(db: Session = Depends(get_db)):
 def get_blog_by_id(id: int, response: Response, db: Session = Depends(get_db)):
     blog = db.query(_models.Blog).filter(_models.Blog.id == id).first()
     if not blog:
-        response.status_code = status.HTTP_404_NOT_FOUND
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Blog with id {id} not found"
+        )
     return blog
 
 

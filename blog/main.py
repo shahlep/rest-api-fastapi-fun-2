@@ -19,7 +19,7 @@ def get_db():
         db.close()
 
 
-@app.post('/blog', status_code=status.HTTP_201_CREATED)
+@app.post('/blog', status_code=status.HTTP_201_CREATED, tags=['Blog'])
 def create(blog: _schemas.Blog, db: Session = Depends(get_db)):
     new_blog = _models.Blog(title=blog.title, content=blog.content)
     db.add(new_blog)
@@ -28,13 +28,13 @@ def create(blog: _schemas.Blog, db: Session = Depends(get_db)):
     return new_blog
 
 
-@app.get('/blog', response_model=List[_schemas.ShowBlog], status_code=status.HTTP_200_OK)
+@app.get('/blog', tags=['Blog'],response_model=List[_schemas.ShowBlog], status_code=status.HTTP_200_OK)
 def all_blog(db: Session = Depends(get_db)):
     blogs = db.query(_models.Blog).all()
     return blogs
 
 
-@app.get('/blog/{id}', response_model=_schemas.ShowBlog, status_code=status.HTTP_200_OK)
+@app.get('/blog/{id}',tags=['Blog'], response_model=_schemas.ShowBlog, status_code=status.HTTP_200_OK)
 def get_blog_by_id(id:int, response: Response, db: Session = Depends(get_db)):
     blog = db.query(_models.Blog).filter(_models.Blog.id == id).first()
     if not blog:
@@ -42,7 +42,7 @@ def get_blog_by_id(id:int, response: Response, db: Session = Depends(get_db)):
     return blog
 
 
-@app.put('/blog/{id}', status_code=status.HTTP_202_ACCEPTED)
+@app.put('/blog/{id}',tags=['Blog'], status_code=status.HTTP_202_ACCEPTED)
 def update_blog_by_id(id:int, blog_org: _schemas.Blog, db: Session = Depends(get_db)):
     blog = db.query(_models.Blog).filter(_models.Blog.id == id)
     if not blog.first():
@@ -52,7 +52,7 @@ def update_blog_by_id(id:int, blog_org: _schemas.Blog, db: Session = Depends(get
     return 'Updated'
 
 
-@app.delete('/blog/{id}', status_code=status.HTTP_204_NO_CONTENT)
+@app.delete('/blog/{id}',tags=['Blog'], status_code=status.HTTP_204_NO_CONTENT)
 def delete_blog_by_id(id:int, response: Response, db: Session = Depends(get_db)):
     blog = db.query(_models.Blog).filter(_models.Blog.id == id)
     if not blog.first():
@@ -62,7 +62,7 @@ def delete_blog_by_id(id:int, response: Response, db: Session = Depends(get_db))
     return 'delete task done'
 
 
-@app.post('/user')
+@app.post('/user',tags=['User'])
 def create_user(user: _schemas.User, db: Session = Depends(get_db)):
     new_user = _models.User(name=user.name, email=user.email, password=Hash.encrypt(user.password))
     db.add(new_user)
@@ -71,13 +71,13 @@ def create_user(user: _schemas.User, db: Session = Depends(get_db)):
     return new_user
 
 
-@app.get('/user', response_model=List[_schemas.ShowUser], status_code=status.HTTP_200_OK)
+@app.get('/user',tags=['User'], response_model=List[_schemas.ShowUser], status_code=status.HTTP_200_OK)
 def all_User(db: Session = Depends(get_db)):
     users = db.query(_models.User).all()
     return users
 
 
-@app.get('/user/{id}', response_model=_schemas.ShowUser, status_code=status.HTTP_200_OK)
+@app.get('/user/{id}',tags=['User'], response_model=_schemas.ShowUser, status_code=status.HTTP_200_OK)
 def get_user_by_id(id:int, response: Response, db: Session = Depends(get_db)):
     user = db.query(_models.User).filter(_models.User.id == id).first()
     if not user:

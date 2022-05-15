@@ -9,7 +9,7 @@ class Blog(Base):
     title = Column(String, index=True)
     content = Column(String, index=True)
     user_id = Column(Integer, ForeignKey("user.id"))
-# https://docs.sqlalchemy.org/en/14/orm/relationship_api.html?highlight=relationship#sqlalchemy.orm.relationship
+    # https://docs.sqlalchemy.org/en/14/orm/relationship_api.html?highlight=relationship#sqlalchemy.orm.relationship
     content_creator = relationship("User", back_populates="blogs")
 
 
@@ -20,4 +20,4 @@ class User(Base):
     email = Column(String, index=True)
     password = Column(String, index=True)
 
-    blogs = relationship("User", back_populates="content_creator")
+    blogs = relationship("Blog", back_populates="content_creator")

@@ -62,5 +62,9 @@ def delete_blog_by_id(id, response: Response, db: Session = Depends(get_db)):
 
 
 @app.post('/User')
-def create_user(user: _schemas.User):
-    return user
+def create_user(user: _schemas.User,db: Session = Depends(get_db)):
+    new_user = _models.User(name=user.name, email=user.email,password=user.password)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return new_user

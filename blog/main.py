@@ -3,6 +3,7 @@ from . import schemas as _schemas
 from . import models as _models
 from .databases import engine, SessionLocal
 from sqlalchemy.orm import Session
+from typing import List
 
 app = FastAPI()
 
@@ -26,13 +27,13 @@ def create(blog: _schemas.Blog, db: Session = Depends(get_db)):
     return new_blog
 
 
-@app.get('/blog', status_code=status.HTTP_200_OK)
-def all_blog(db: Session = Depends(get_db)):
+@app.get('/blog', response_model=List[_schemas.ShowBlog],status_code=status.HTTP_200_OK)
+def all_blog( db: Session = Depends(get_db)):
     blogs = db.query(_models.Blog).all()
     return blogs
 
 
-@app.get('/blog/{id}',response_model=_schemas.ShowBlog,status_code=status.HTTP_200_OK)
+@app.get('/blog/{id}', response_model=_schemas.ShowBlog, status_code=status.HTTP_200_OK)
 def get_blog_by_id(id, response: Response, db: Session = Depends(get_db)):
     blog = db.query(_models.Blog).filter(_models.Blog.id == id).first()
     if not blog:

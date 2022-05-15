@@ -7,7 +7,9 @@ class Blog(BaseModel):
 
 
 # https://pydantic-docs.helpmanual.io/usage/models/#recursive-orm-models
-class ShowBlog(Blog):
+class ShowBlog(BaseModel):
+    title: str
+    content: str
+
     class Config:
         orm_mode = True
-

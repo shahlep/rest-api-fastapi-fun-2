@@ -1,10 +1,10 @@
 from fastapi import FastAPI, Depends, status, Response, HTTPException
 from . import schemas as _schemas
 from . import models as _models
+from .hashing import Hash
 from .databases import engine, SessionLocal
 from sqlalchemy.orm import Session
 from typing import List
-from passlib.context import CryptContext
 
 app = FastAPI()
 
@@ -62,14 +62,9 @@ def delete_blog_by_id(id, response: Response, db: Session = Depends(get_db)):
     return 'delete task done'
 
 
-# https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/?h=hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
 @app.post('/User')
 def create_user(user: _schemas.User, db: Session = Depends(get_db)):
-    hashed_password = pwd_context.hash(user.password)
-    new_user = _models.User(name=user.name, email=user.email, password=hashed_password)
+    new_user = _models.User(name=user.name, email=user.email, password=Hash.encrypt(user.password))
     db.add(new_user)
     db.commit()
     db.refresh(new_user)

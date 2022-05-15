@@ -21,7 +21,7 @@ def get_db():
 
 @app.post("/blog", status_code=status.HTTP_201_CREATED, tags=["Blog"])
 def create(blog: _schemas.Blog, db: Session = Depends(get_db)):
-    new_blog = _models.Blog(title=blog.title, content=blog.content, user_id=blog.user)
+    new_blog = _models.Blog(title=blog.title, content=blog.content, user_id=blog.user_id)
     db.add(new_blog)
     db.commit()
     db.refresh(new_blog)
@@ -31,8 +31,8 @@ def create(blog: _schemas.Blog, db: Session = Depends(get_db)):
 @app.get(
     "/blog",
     tags=["Blog"],
-    response_model=List[_schemas.ShowBlog],
-    status_code=status.HTTP_200_OK,
+    #response_model=List[_schemas.ShowBlog],
+    status_code=status.HTTP_200_OK
 )
 def all_blog(db: Session = Depends(get_db)):
     blogs = db.query(_models.Blog).all()
@@ -45,7 +45,7 @@ def all_blog(db: Session = Depends(get_db)):
     response_model=_schemas.ShowBlog,
     status_code=status.HTTP_200_OK,
 )
-def get_blog_by_id(id: int, response: Response, db: Session = Depends(get_db)):
+def get_blog_by_id(id: int, db: Session = Depends(get_db)):
     blog = db.query(_models.Blog).filter(_models.Blog.id == id).first()
     if not blog:
         raise HTTPException(

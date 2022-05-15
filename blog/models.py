@@ -9,7 +9,7 @@ class Blog(Base):
     title = Column(String, index=True)
     content = Column(String, index=True)
     user_id = Column(Integer, ForeignKey("user.id"))
-
+# https://docs.sqlalchemy.org/en/14/orm/relationship_api.html?highlight=relationship#sqlalchemy.orm.relationship
     content_creator = relationship("User", back_populates="blogs")
 
 

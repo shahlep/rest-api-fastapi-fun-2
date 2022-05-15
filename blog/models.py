@@ -1,16 +1,22 @@
 from sqlalchemy import Column, Integer, String
 from .databases import Base
+from sqlalchemy.orm import relationship
 
 
 class Blog(Base):
-    __tablename__ = 'blog'
+    __tablename__ = "blog"
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
     content = Column(String, index=True)
 
+    content_creator = relationship("User", back_populates="blogs")
+
+
 class User(Base):
-    __tablename__ = 'user'
+    __tablename__ = "user"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     email = Column(String, index=True)
     password = Column(String, index=True)
+
+    blogs = relationship("User", back_populates="content_creator")

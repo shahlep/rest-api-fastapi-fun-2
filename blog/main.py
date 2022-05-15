@@ -35,7 +35,7 @@ def all_blog(db: Session = Depends(get_db)):
 
 
 @app.get('/blog/{id}', response_model=_schemas.ShowBlog, status_code=status.HTTP_200_OK)
-def get_blog_by_id(id, response: Response, db: Session = Depends(get_db)):
+def get_blog_by_id(id:int, response: Response, db: Session = Depends(get_db)):
     blog = db.query(_models.Blog).filter(_models.Blog.id == id).first()
     if not blog:
         response.status_code = status.HTTP_404_NOT_FOUND
@@ -43,7 +43,7 @@ def get_blog_by_id(id, response: Response, db: Session = Depends(get_db)):
 
 
 @app.put('/blog/{id}', status_code=status.HTTP_202_ACCEPTED)
-def update_blog_by_id(id, blog_org: _schemas.Blog, db: Session = Depends(get_db)):
+def update_blog_by_id(id:int, blog_org: _schemas.Blog, db: Session = Depends(get_db)):
     blog = db.query(_models.Blog).filter(_models.Blog.id == id)
     if not blog.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Blog not found')
@@ -53,7 +53,7 @@ def update_blog_by_id(id, blog_org: _schemas.Blog, db: Session = Depends(get_db)
 
 
 @app.delete('/blog/{id}', status_code=status.HTTP_204_NO_CONTENT)
-def delete_blog_by_id(id, response: Response, db: Session = Depends(get_db)):
+def delete_blog_by_id(id:int, response: Response, db: Session = Depends(get_db)):
     blog = db.query(_models.Blog).filter(_models.Blog.id == id)
     if not blog.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Blog not found')
@@ -78,7 +78,7 @@ def all_User(db: Session = Depends(get_db)):
 
 
 @app.get('/user/{id}', response_model=_schemas.ShowUser, status_code=status.HTTP_200_OK)
-def get_user_by_id(id, response: Response, db: Session = Depends(get_db)):
+def get_user_by_id(id:int, response: Response, db: Session = Depends(get_db)):
     user = db.query(_models.User).filter(_models.User.id == id).first()
     if not user:
         response.status_code = status.HTTP_404_NOT_FOUND

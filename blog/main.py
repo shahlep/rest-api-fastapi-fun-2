@@ -27,8 +27,8 @@ def create(blog: _schemas.Blog, db: Session = Depends(get_db)):
     return new_blog
 
 
-@app.get('/blog', response_model=List[_schemas.ShowBlog],status_code=status.HTTP_200_OK)
-def all_blog( db: Session = Depends(get_db)):
+@app.get('/blog', response_model=List[_schemas.ShowBlog], status_code=status.HTTP_200_OK)
+def all_blog(db: Session = Depends(get_db)):
     blogs = db.query(_models.Blog).all()
     return blogs
 
@@ -59,3 +59,8 @@ def delete_blog_by_id(id, response: Response, db: Session = Depends(get_db)):
     blog.delete(synchronize_session=False)
     db.commit()
     return 'delete task done'
+
+
+@app.post('/User')
+def create_user(user: _schemas.User):
+    return user

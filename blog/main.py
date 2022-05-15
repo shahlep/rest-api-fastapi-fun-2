@@ -81,5 +81,5 @@ def all_User(db: Session = Depends(get_db)):
 def get_user_by_id(id:int, response: Response, db: Session = Depends(get_db)):
     user = db.query(_models.User).filter(_models.User.id == id).first()
     if not user:
-        response.status_code = status.HTTP_404_NOT_FOUND
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'User with id {id} not found')
     return user

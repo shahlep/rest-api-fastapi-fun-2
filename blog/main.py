@@ -62,10 +62,24 @@ def delete_blog_by_id(id, response: Response, db: Session = Depends(get_db)):
     return 'delete task done'
 
 
-@app.post('/User')
+@app.post('/user')
 def create_user(user: _schemas.User, db: Session = Depends(get_db)):
     new_user = _models.User(name=user.name, email=user.email, password=Hash.encrypt(user.password))
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
     return new_user
+
+
+@app.get('/user', response_model=List[_schemas.ShowUser], status_code=status.HTTP_200_OK)
+def all_User(db: Session = Depends(get_db)):
+    users = db.query(_models.User).all()
+    return users
+
+
+@app.get('/user/{id}', response_model=_schemas.ShowUser, status_code=status.HTTP_200_OK)
+def get_user_by_id(id, response: Response, db: Session = Depends(get_db)):
+    user = db.query(_models.User).filter(_models.User.id == id).first()
+    if not user:
+        response.status_code = status.HTTP_404_NOT_FOUND
+    return user

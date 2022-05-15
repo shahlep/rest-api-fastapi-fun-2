@@ -26,7 +26,7 @@ def create(blog: _schemas.Blog, db: Session = Depends(get_db)):
     return new_blog
 
 
-@app.get('/blog', status_code=status.HTTP_200_OK)
+@app.get('/blog',response_model=_schemas.ShowBlog, status_code=status.HTTP_200_OK)
 def all_blog(db: Session = Depends(get_db)):
     blogs = db.query(_models.Blog).all()
     return blogs

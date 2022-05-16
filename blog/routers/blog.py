@@ -3,20 +3,22 @@ from .. import databases, models as _models, schemas as _schemas
 from sqlalchemy.orm import Session
 from typing import List
 
-router = APIRouter()
+router = APIRouter(
+    tags=["Blog"]
+)
 
 # https://stackoverflow.com/questions/12074726/typeerror-generator-object-is-not-callable
 get_db = databases.get_db
 
 
-@router.get("/blog", tags=["Blog"], response_model=List[_schemas.ShowBlog],
+@router.get("/blog", response_model=List[_schemas.ShowBlog],
             status_code=status.HTTP_200_OK)
 def all_blog(db: Session = Depends(get_db)):
     blogs = db.query(_models.Blog).all()
     return blogs
 
 
-@router.post("/blog", status_code=status.HTTP_201_CREATED, tags=["Blog"])
+@router.post("/blog", status_code=status.HTTP_201_CREATED)
 def create(blog: _schemas.Blog, db: Session = Depends(get_db)):
     new_blog = _models.Blog(
         title=blog.title, content=blog.content, user_id=blog.user_id
@@ -29,7 +31,6 @@ def create(blog: _schemas.Blog, db: Session = Depends(get_db)):
 
 @router.get(
     "/blog/{id}",
-    tags=["Blog"],
     response_model=_schemas.ShowBlog,
     status_code=status.HTTP_200_OK,
 )
@@ -42,7 +43,7 @@ def get_blog_by_id(id: int, db: Session = Depends(get_db)):
     return blog
 
 
-@router.put("/blog/{id}", tags=["Blog"], status_code=status.HTTP_202_ACCEPTED)
+@router.put("/blog/{id}", status_code=status.HTTP_202_ACCEPTED)
 def update_blog_by_id(id: int, blog_org: _schemas.Blog, db: Session = Depends(get_db)):
     blog = db.query(_models.Blog).filter(_models.Blog.id == id)
     if not blog.first():
@@ -54,7 +55,7 @@ def update_blog_by_id(id: int, blog_org: _schemas.Blog, db: Session = Depends(ge
     return "Updated"
 
 
-@router.delete("/blog/{id}", tags=["Blog"], status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/blog/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_blog_by_id(id: int, db: Session = Depends(get_db)):
     blog = db.query(_models.Blog).filter(_models.Blog.id == id)
     if not blog.first():

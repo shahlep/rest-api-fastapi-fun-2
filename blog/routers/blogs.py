@@ -1,11 +1,11 @@
 from fastapi import APIRouter, status, Depends, HTTPException
 from .. import databases, models as _models, schemas as _schemas
 from sqlalchemy.orm import Session
-from ..databases import *
 from typing import List
 
 router = APIRouter()
 
+# https://stackoverflow.com/questions/12074726/typeerror-generator-object-is-not-callable
 get_db = databases.get_db
 
 

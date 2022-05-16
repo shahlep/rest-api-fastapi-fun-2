@@ -22,7 +22,7 @@ def create(blog: _schemas.Blog, db: Session = Depends(get_db)):
     return new_blog
 
 
-@app.get(
+'''@app.get(
     "/blog",
     tags=["Blog"],
     # response_model=List[_schemas.ShowBlog],
@@ -30,7 +30,7 @@ def create(blog: _schemas.Blog, db: Session = Depends(get_db)):
 )
 def all_blog(db: Session = Depends(get_db)):
     blogs = db.query(_models.Blog).all()
-    return blogs
+    return blogs'''
 
 
 @app.get(

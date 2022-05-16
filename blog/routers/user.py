@@ -6,7 +6,7 @@ from typing import List
 
 router = APIRouter()
 
-get_db = databases.get_db()
+get_db = databases.get_db
 
 
 @router.post("/user", tags=["User"])

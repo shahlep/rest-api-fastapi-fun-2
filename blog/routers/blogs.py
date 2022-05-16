@@ -6,7 +6,7 @@ from typing import List
 
 router = APIRouter()
 
-get_db = databases.get_db()
+get_db = databases.get_db
 
 
 @router.get("/blog", tags=["Blog"],  # response_model=List[_schemas.ShowBlog],
@@ -16,7 +16,7 @@ def all_blog(db: Session = Depends(get_db)):
     return blogs
 
 
-@router.get("/blog", status_code=status.HTTP_201_CREATED, tags=["Blog"])
+@router.post("/blog", status_code=status.HTTP_201_CREATED, tags=["Blog"])
 def create(blog: _schemas.Blog, db: Session = Depends(get_db)):
     new_blog = _models.Blog(
         title=blog.title, content=blog.content, user_id=blog.user_id

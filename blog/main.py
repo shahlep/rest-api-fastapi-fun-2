@@ -11,14 +11,6 @@ app = FastAPI()
 _models.Base.metadata.create_all(bind=engine)
 
 
-"""def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()"""
-
-
 @app.post("/blog", status_code=status.HTTP_201_CREATED, tags=["Blog"])
 def create(blog: _schemas.Blog, db: Session = Depends(get_db)):
     new_blog = _models.Blog(

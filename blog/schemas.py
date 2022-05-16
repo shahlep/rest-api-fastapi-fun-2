@@ -29,10 +29,17 @@ class ShowUserBase(BaseModel):
         orm_mode = True
 
 
+class ShowUserName(BaseModel):
+    name: str
+
+    class Config:
+        orm_mode = True
+
+
 class ShowBlog(BaseModel):
     title: str
     content: str
-    content_creator: ShowUserBase
+    content_creator: ShowUserName
 
     class Config:
         orm_mode = True

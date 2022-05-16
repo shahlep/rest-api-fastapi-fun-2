@@ -1,16 +1,16 @@
-from fastapi import FastAPI, Depends, status, Response, HTTPException
-from . import schemas as _schemas
+from fastapi import FastAPI
 from . import models as _models
-from .hashing import Hash
 from .databases import *
-from sqlalchemy.orm import Session
-from typing import List
+from .routers import blogs, user
 
 app = FastAPI()
 
+app.include_router(blogs.router)
+app.include_router(user.router)
+
 _models.Base.metadata.create_all(bind=engine)
 
-
+'''
 @app.post("/blog", status_code=status.HTTP_201_CREATED, tags=["Blog"])
 def create(blog: _schemas.Blog, db: Session = Depends(get_db)):
     new_blog = _models.Blog(
@@ -19,10 +19,9 @@ def create(blog: _schemas.Blog, db: Session = Depends(get_db)):
     db.add(new_blog)
     db.commit()
     db.refresh(new_blog)
-    return new_blog
+    return new_blog 
 
-
-'''@app.get(
+@app.get(
     "/blog",
     tags=["Blog"],
     # response_model=List[_schemas.ShowBlog],
@@ -30,7 +29,7 @@ def create(blog: _schemas.Blog, db: Session = Depends(get_db)):
 )
 def all_blog(db: Session = Depends(get_db)):
     blogs = db.query(_models.Blog).all()
-    return blogs'''
+    return blogs
 
 
 @app.get(
@@ -47,7 +46,6 @@ def get_blog_by_id(id: int, db: Session = Depends(get_db)):
         )
     return blog
 
-
 @app.put("/blog/{id}", tags=["Blog"], status_code=status.HTTP_202_ACCEPTED)
 def update_blog_by_id(id: int, blog_org: _schemas.Blog, db: Session = Depends(get_db)):
     blog = db.query(_models.Blog).filter(_models.Blog.id == id)
@@ -58,7 +56,6 @@ def update_blog_by_id(id: int, blog_org: _schemas.Blog, db: Session = Depends(ge
     blog.update(blog_org)
     db.commit()
     return "Updated"
-
 
 @app.delete("/blog/{id}", tags=["Blog"], status_code=status.HTTP_204_NO_CONTENT)
 def delete_blog_by_id(id: int, response: Response, db: Session = Depends(get_db)):
@@ -107,3 +104,4 @@ def get_user_by_id(id: int, response: Response, db: Session = Depends(get_db)):
             status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id {id} not found"
         )
     return user
+'''

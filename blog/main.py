@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, status, Response, HTTPException
 from . import schemas as _schemas
 from . import models as _models
 from .hashing import Hash
-from .databases import engine, SessionLocal
+from .databases import *
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -11,12 +11,12 @@ app = FastAPI()
 _models.Base.metadata.create_all(bind=engine)
 
 
-def get_db():
+"""def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
-        db.close()
+        db.close()"""
 
 
 @app.post("/blog", status_code=status.HTTP_201_CREATED, tags=["Blog"])

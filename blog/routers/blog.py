@@ -3,17 +3,13 @@ from .. import databases, models as _models, schemas as _schemas
 from sqlalchemy.orm import Session
 from typing import List
 
-router = APIRouter(
-    prefix='/blog',
-    tags=["Blog"]
-)
+router = APIRouter(prefix="/blog", tags=["Blog"])
 
 # https://stackoverflow.com/questions/12074726/typeerror-generator-object-is-not-callable
 get_db = databases.get_db
 
 
-@router.get("/", response_model=List[_schemas.ShowBlog],
-            status_code=status.HTTP_200_OK)
+@router.get("/", response_model=List[_schemas.ShowBlog], status_code=status.HTTP_200_OK)
 def all_blog(db: Session = Depends(get_db)):
     blogs = db.query(_models.Blog).all()
     return blogs

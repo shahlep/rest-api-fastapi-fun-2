@@ -4,10 +4,7 @@ from ..hashing import Hash
 from sqlalchemy.orm import Session
 from typing import List
 
-router = APIRouter(
-    prefix='/user',
-    tags=["User"]
-)
+router = APIRouter(prefix="/user", tags=["User"])
 
 get_db = databases.get_db
 

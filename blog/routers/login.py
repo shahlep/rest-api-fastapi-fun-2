@@ -1,6 +1,8 @@
 from fastapi import APIRouter
 
-router = APIRouter()
+router = APIRouter(
+    tags=['User Authentication']
+)
 
 
 @router.post('/login')

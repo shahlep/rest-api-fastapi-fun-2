@@ -54,6 +54,6 @@ class ShowUser(ShowUserBase):
         orm_mode = True
 
 
-class login(BaseModel):
+class Login(BaseModel):
     username: str
     password: str

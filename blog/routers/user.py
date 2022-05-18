@@ -21,11 +21,21 @@ def create_user(user: _schemas.User, db: Session = Depends(get_db)):
 
 
 @router.get(
+    "",
+    response_model=_schemas.ShowUser,
+    status_code=status.HTTP_200_OK,
+)
+def get_user_by_name(name: str, db: Session = Depends(get_db)):
+    name = db.query(_models.User).filter(_models.User.name == name).first()
+    return name
+
+
+@router.get(
     "/",
     response_model=List[_schemas.ShowUser],
     status_code=status.HTTP_200_OK,
 )
-def all_User(db: Session = Depends(get_db)):
+def get_all_user(db: Session = Depends(get_db)):
     users = db.query(_models.User).all()
     return users
 
